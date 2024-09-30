@@ -124,4 +124,24 @@ class Portefeuille
 
         return $this;
     }
+    /*
+Explication de la méthode calculerValeurPortefeuille() :
+
+La méthode initialise $valeurTotale à 0 et un tableau $quantites pour stocker les quantités nettes des actions.
+Elle parcourt toutes les transactions du portefeuille pour calculer la quantité nette de chaque action :
+Pour chaque transaction, elle récupère le symbole de l'action concernée.
+Si le type de transaction est "achat", elle ajoute la quantité à $quantites.
+Si le type est "vente", elle soustrait la quantité de $quantites.
+Après avoir calculé les quantités nettes, elle parcourt les actions du portefeuille :
+Pour chaque action, elle multiplie la quantité nette détenue par le prix actuel de l'action.
+Elle ajoute cette valeur à $valeurTotale.
+Enfin, elle retourne la valeur totale du portefeuille.
+    */
+
+    public function calculerValeurPortefeuille() {
+        $valeurTotale = 0.0;
+        $quantites = [];
+
+        return $valeurTotale;
+    }
 }
