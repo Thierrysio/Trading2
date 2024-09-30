@@ -75,4 +75,25 @@ class Trader
 
         return $this;
     }
+
+    /*
+Explication de la méthode calculerValeurTotalePortefeuilles() :
+
+Cette méthode initialise une variable $valeurTotale à 0.
+Elle parcourt la liste des portefeuilles du trader.
+Pour chaque portefeuille, elle appelle la méthode calculerValeurPortefeuille() pour obtenir sa valeur.
+Elle additionne cette valeur à $valeurTotale.
+Enfin, elle retourne la valeur totale de tous les portefeuilles du trader.
+    */
+    public function calculerValeurTotalePortefeuilles():float {
+        $valeurTotale = 0.0;
+
+        // Parcourt chaque portefeuille du trader
+        foreach ($this->portefeuilles as $portefeuille) {
+            // Ajoute la valeur du portefeuille à la valeur totale
+            $valeurTotale += $portefeuille->calculerValeurPortefeuille();
+        }
+
+        return $valeurTotale;
+    }
 }
