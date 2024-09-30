@@ -142,6 +142,35 @@ Enfin, elle retourne la valeur totale du portefeuille.
         $valeurTotale = 0.0;
         $quantites = [];
 
+        // Calcule les quantités nettes pour chaque action en fonction des transactions
+        foreach ($this->transactions as $transaction) {
+            $symbole = $transaction->getAction()->getSymbole();
+
+            if (!isset($quantites[$symbole])) {
+                $quantites[$symbole] = 0;
+            }
+
+            if (strtolower($transaction->getType()) === 'achat') {
+                // Ajoute la quantité achetée
+                $quantites[$symbole] += $transaction->getQuantite();
+            } elseif (strtolower($transaction->getType()) === 'vente') {
+                // Soustrait la quantité vendue
+                $quantites[$symbole] -= $transaction->getQuantite();
+            }
+        }
+
+        // Calcule la valeur totale en multipliant les quantités par le prix actuel des actions
+        foreach ($this->actions as $action) {
+            $symbole = $action->getSymbole();
+
+            if (isset($quantites[$symbole])) {
+                $quantite = $quantites[$symbole];
+                $prix = $action->getPrix();
+                // Ajoute au total la valeur de l'action (quantité * prix)
+                $valeurTotale += $quantite * $prix;
+            }
+        }
+
         return $valeurTotale;
     }
 }
