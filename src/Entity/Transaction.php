@@ -30,6 +30,9 @@ class Transaction
     #[ORM\ManyToOne(inversedBy: 'transactions')]
     private ?Portefeuille $portefeuille = null;
 
+    #[ORM\ManyToOne(inversedBy: 'transactions')]
+    private ?Action $action = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,6 +101,18 @@ class Transaction
     public function calculerValeurTransaction() : float
     {
         return $this->quantite * $this->prix;
+    }
+
+    public function getAction(): ?Action
+    {
+        return $this->action;
+    }
+
+    public function setAction(?Action $action): static
+    {
+        $this->action = $action;
+
+        return $this;
     }
 
 
