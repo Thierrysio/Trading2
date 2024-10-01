@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TransactionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use PhpParser\Node\Expr\Cast\Double;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
@@ -32,6 +33,16 @@ class Transaction
 
     #[ORM\ManyToOne(inversedBy: 'transactions')]
     private ?Action $action = null;
+
+    public function __construct($date) {
+        // Validation du format de la date avant d'initialiser l'objet
+        if (!$this->verifierFormatDate($date)) {
+            throw new Exception("Le format de la date est invalide. La date doit être au format JJ/MM/AAAA.");
+        }
+            // Si la date est valide, initialisation des attributs
+            $this->date = $date;
+
+        }
 
     public function getId(): ?int
     {
@@ -115,6 +126,10 @@ class Transaction
         return $this;
     }
 
-
+    private function verifierFormatDate($date) {
+        // Ajout des délimiteurs '/' autour du motif
+        $pattern = '/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/';
+        return preg_match($pattern, $date);
+    }
 
 }
