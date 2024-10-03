@@ -96,4 +96,28 @@ Enfin, elle retourne la valeur totale de tous les portefeuilles du trader.
 
         return $valeurTotale;
     }
+
+    private function verifierFormatEmail($email) {
+        // Utilisation d'une regex pour vérifier le format standard d'un email
+        $pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        return preg_match($pattern, $email);
+    }
+
+    /**
+     * Liste toutes les actions possédées par le trader sans doublons.
+     *
+     * @return array Collection des actions possédées.
+     */
+    public function listerToutesLesActionsPossedees() {
+        $actionsPossedees = [];
+        foreach ($this->portefeuilles as $portefeuille) {
+            foreach ($portefeuille->getActions() as $action) {
+                $symbole = $action->getSymbole();
+                if (!isset($actionsPossedees[$symbole])) {
+                    $actionsPossedees[$symbole] = $action;
+                }
+            }
+        }
+        return array_values($actionsPossedees);
+    }
 }
