@@ -173,4 +173,45 @@ Enfin, elle retourne la valeur totale du portefeuille.
 
         return $valeurTotale;
     }
+
+    /**
+     * Vend une quantité spécifique d'une action.
+     *
+     * @param Action $a L'action à vendre.
+     * @param int $quantite La quantité à vendre.
+     */
+    public function vendreAction(Action $a, int $quantite) {
+        $symbole = $a->getSymbole();
+        if (isset($this->actions[$symbole]) && $this->actions[$symbole]['quantite'] >= $quantite) {
+            // Crée une transaction de vente
+            $transaction = new Transaction($a, $quantite, $a->getPrix(), 'Vente', $this);
+            $transaction->executer();
+
+            // Met à jour la quantité détenue
+            $this->actions[$symbole]['quantite'] -= $quantite;
+
+            // Si la quantité atteint zéro, supprime l'action du portefeuille
+            if ($this->actions[$symbole]['quantite'] === 0) {
+                $this->supprimerAction($a);
+            }
+        } else {
+            echo "Quantité insuffisante pour vendre.\n";
+        }
+    }
+
+     /**
+     * Ajoute une action avec une quantité spécifique au portefeuille.
+     *
+     * @param Action $a L'action à ajouter.
+     * @param int $quantite La quantité à ajouter.
+     */
+    public function ajouterAction(Action $a, int $quantite) {
+        $symbole = $a->getSymbole();
+        if (isset($this->actions[$symbole])) {
+            $this->actions[$symbole]['quantite'] += $quantite;
+        } else {
+            $this->actions[$symbole] = ['action' => $a, 'quantite' => $quantite];
+            $a->ajouterPortefeuille($this);
+        }
+    }
 }
