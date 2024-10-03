@@ -170,5 +170,22 @@ class Action
 
             return $this;
         }
+
+         /**
+     * Liste les traders qui détiennent cette action.
+     *
+     * @return array Collection des traders détenant l'action.
+     */
+    public function listerTradersDetenantAction() {
+        $traders = [];
+        foreach ($this->portefeuilles as $portefeuille) {
+            $trader = $portefeuille->getProprietaire();
+            $nomTrader = $trader->getNom();
+            if (!isset($traders[$nomTrader])) {
+                $traders[$nomTrader] = $trader;
+            }
+        }
+        return array_values($traders);
+    }
     }
 
