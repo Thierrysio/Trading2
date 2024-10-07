@@ -6,6 +6,7 @@ use App\Repository\PortefeuilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 #[ORM\Entity(repositoryClass: PortefeuilleRepository::class)]
 class Portefeuille
@@ -139,79 +140,39 @@ Enfin, elle retourne la valeur totale du portefeuille.
     */
 
     public function calculerValeurPortefeuille() {
-        $valeurTotale = 0.0;
-        $quantites = [];
-
-        // Calcule les quantités nettes pour chaque action en fonction des transactions
-        foreach ($this->transactions as $transaction) {
-            $symbole = $transaction->getAction()->getSymbole();
-
-            if (!isset($quantites[$symbole])) {
-                $quantites[$symbole] = 0;
+        
+        $valeurTotale = 0;
+        foreach($this->getActions() as $action)
+        {
+            $coursActuel = $action->getPrix();
+            $quantiteParAction = 0;
+            foreach($action->getTransactions() as $transaction)
+            {
+                if($transaction->gettype()==="achat")
+                {
+                    $quantiteParAction += $transaction->getQuantite();
+                }
+                elseif($transaction->gettype()==="vente")
+                {
+                    $quantiteParAction -= $transaction->getQuantite();
+                }
             }
-
-            if (strtolower($transaction->getType()) === 'achat') {
-                // Ajoute la quantité achetée
-                $quantites[$symbole] += $transaction->getQuantite();
-            } elseif (strtolower($transaction->getType()) === 'vente') {
-                // Soustrait la quantité vendue
-                $quantites[$symbole] -= $transaction->getQuantite();
-            }
+            $valeurTotale +=  $coursActuel * $quantiteParAction;
         }
-
-        // Calcule la valeur totale en multipliant les quantités par le prix actuel des actions
-        foreach ($this->actions as $action) {
-            $symbole = $action->getSymbole();
-
-            if (isset($quantites[$symbole])) {
-                $quantite = $quantites[$symbole];
-                $prix = $action->getPrix();
-                // Ajoute au total la valeur de l'action (quantité * prix)
-                $valeurTotale += $quantite * $prix;
-            }
-        }
-
         return $valeurTotale;
     }
 
-    /**
-     * Vend une quantité spécifique d'une action.
-     *
-     * @param Action $a L'action à vendre.
-     * @param int $quantite La quantité à vendre.
-     */
-    public function vendreAction(Action $a, int $quantite) {
-        $symbole = $a->getSymbole();
-        if (isset($this->actions[$symbole]) && $this->actions[$symbole]['quantite'] >= $quantite) {
-            // Crée une transaction de vente
-            $transaction = new Transaction($a, $quantite, $a->getPrix(), 'Vente', $this);
-            $transaction->executer();
+public  function nombreTotalActions(): int
+{
+    $total = 0;
 
-            // Met à jour la quantité détenue
-            $this->actions[$symbole]['quantite'] -= $quantite;
+    foreach($this->actions as $uneAction)
+    {
 
-            // Si la quantité atteint zéro, supprime l'action du portefeuille
-            if ($this->actions[$symbole]['quantite'] === 0) {
-                $this->supprimerAction($a);
-            }
-        } else {
-            echo "Quantité insuffisante pour vendre.\n";
-        }
+    $total ++;
     }
+    return $total;
+}
 
-     /**
-     * Ajoute une action avec une quantité spécifique au portefeuille.
-     *
-     * @param Action $a L'action à ajouter.
-     * @param int $quantite La quantité à ajouter.
-     */
-    public function ajouterAction(Action $a, int $quantite) {
-        $symbole = $a->getSymbole();
-        if (isset($this->actions[$symbole])) {
-            $this->actions[$symbole]['quantite'] += $quantite;
-        } else {
-            $this->actions[$symbole] = ['action' => $a, 'quantite' => $quantite];
-            $a->ajouterPortefeuille($this);
-        }
-    }
+
 }

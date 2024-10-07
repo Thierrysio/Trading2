@@ -86,16 +86,17 @@ Elle additionne cette valeur à $valeurTotale.
 Enfin, elle retourne la valeur totale de tous les portefeuilles du trader.
     */
     public function calculerValeurTotalePortefeuilles():float {
-        $valeurTotale = 0.0;
 
-        // Parcourt chaque portefeuille du trader
-        foreach ($this->portefeuilles as $portefeuille) {
-            // Ajoute la valeur du portefeuille à la valeur totale
+        $valeurTotale = 0.0;
+        foreach($this->getPortefeuilles() as $portefeuille)
+        {
             $valeurTotale += $portefeuille->calculerValeurPortefeuille();
         }
 
         return $valeurTotale;
     }
+
+
 
     private function verifierFormatEmail($email) {
         // Utilisation d'une regex pour vérifier le format standard d'un email
@@ -119,5 +120,20 @@ Enfin, elle retourne la valeur totale de tous les portefeuilles du trader.
             }
         }
         return array_values($actionsPossedees);
+    }
+
+    public function trouverPortefeuilleParNom(string $nomPortefeuille): ?Portefeuille
+    {
+        $unPortefeuille = null;
+
+        foreach($this->portefeuilles as $lePortefeuille)
+        {
+            if($lePortefeuille->getNom()===$nomPortefeuille)
+            {
+                return $unPortefeuille = $lePortefeuille;
+            }
+        }
+
+        return $unPortefeuille;
     }
 }

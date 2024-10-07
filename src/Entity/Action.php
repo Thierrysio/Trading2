@@ -187,5 +187,9 @@ class Action
         }
         return array_values($traders);
     }
+     public function afficherInformationsAction(): string //1point
+     {
+        return "l'action a comme symbole ".$this->id." xxx ".$this->symbole;
+     }
     }
 

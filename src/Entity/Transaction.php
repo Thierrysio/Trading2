@@ -111,6 +111,9 @@ class Transaction
 
     public function calculerValeurTransaction() : float
     {
+        //$resultat = 0;
+        //$resultat = $this->getQuantite() * $this->getPrix();
+        //return $resultat;
         return $this->quantite * $this->prix;
     }
 
@@ -131,5 +134,22 @@ class Transaction
         $pattern = '/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/';
         return preg_match($pattern, $date);
     }
+public function estBeneficiaire(): bool
+{
+    $resultat = false;
+
+    $prixActuel = $this->action->getPrix();
+
+    if($this->type === "achat")
+    {
+        return $prixActuel > $this->prix;
+    }else if ($this->type === "vente")
+    {
+        return $prixActuel < $this->prix;
+    }
+
+
+    return $resultat;
+}
 
 }
