@@ -151,9 +151,11 @@ public function estBeneficiaire(): bool
 
     return $resultat;
 }
-public function obtenirDateTransaction() :?date
+public function obtenirDateTransaction() :\DateTimeInterface
 {
     return $this->date;
 }
+
+
 
 }

@@ -174,5 +174,18 @@ public  function nombreTotalActions(): int
     return $total;
 }
 
+public function obtenirSymboleActions(): array
+{
+$resultat = [];
+
+foreach($this->actions as $symbole => $details)
+{
+    $resultat[] = $symbole;
+
+}
+
+return $resultat;
+}
+
 
 }

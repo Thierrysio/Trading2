@@ -136,4 +136,16 @@ Enfin, elle retourne la valeur totale de tous les portefeuilles du trader.
 
         return $unPortefeuille;
     }
+
+    public function obtenirNomsPortefeuille(): array
+{
+    $resultat=[];
+
+    foreach($this->portefeuilles as $lePortefeuille)
+    {
+        $resultat[]= $lePortefeuille->getNom();
+    }
+
+    return $resultat;
+}
 }
