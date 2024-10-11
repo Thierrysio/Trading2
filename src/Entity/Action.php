@@ -191,5 +191,16 @@ class Action
      {
         return "l'action a comme symbole ".$this->id." xxx ".$this->symbole;
      }
+
+     public function listerPortefeuillesDetenantAction(): array
+    {
+        $resultat = [];
+
+        foreach ($this->portefeuilles as $portefeuille) {
+            $resultat[] = $portefeuille->getNom();
+        }
+
+        return $resultat;
+    }
     }
 

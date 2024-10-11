@@ -148,4 +148,20 @@ Enfin, elle retourne la valeur totale de tous les portefeuilles du trader.
 
     return $resultat;
 }
+
+public function compterNombreTotalActions(): int
+{
+    $nombreTotalActions = 0;
+
+    foreach($this->portefeuilles as $lePortefeuille)
+    {
+        foreach($lePortefeuille->getActions() as $laAction)
+        {
+            $nombreTotalActions++;
+        }
+    }
+
+    return $nombreTotalActions;
+}
+
 }

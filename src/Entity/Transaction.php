@@ -156,6 +156,16 @@ public function obtenirDateTransaction() :\DateTimeInterface
     return $this->date;
 }
 
-
+public function afficherHistoriqueTransactions(): void
+{
+    echo "Historique des Transactions:\n";
+    foreach ($this->action->getTransactions() as $transaction) {
+        echo "Date: " . $transaction->getDate()->format('Y-m-d H:i:s') . "\n";
+        echo "Type: " . $transaction->getType() . "\n";
+        echo "Quantité: " . $transaction->getQuantite() . "\n";
+        echo "Prix: " . $transaction->getPrix() . "\n";
+        echo "-----------------------\n";
+    }
+}
 
 }
