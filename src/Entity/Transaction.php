@@ -151,5 +151,9 @@ public function estBeneficiaire(): bool
 
     return $resultat;
 }
+public function obtenirDateTransaction() :?date
+{
+    return $this->date;
+}
 
 }
